@@ -179,7 +179,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.12
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: clippy
+          toolchain: nightly
       - run: |
+          rustup 
           pip install pyodide-build>=0.28.0
           echo EMSCRIPTEN_VERSION=$(pyodide config get emscripten_version) >> $GITHUB_ENV
       - uses: mymindstorm/setup-emsdk@v14
