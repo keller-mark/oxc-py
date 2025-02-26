@@ -184,6 +184,7 @@ jobs:
           components: clippy
           toolchain: nightly
       - run: |
+          rustup target add wasm32-unknown-emscripten
           pip install pyodide-build>=0.28.0
           echo EMSCRIPTEN_VERSION=$(pyodide config get emscripten_version) >> $GITHUB_ENV
       - uses: mymindstorm/setup-emsdk@v14
