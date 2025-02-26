@@ -103,3 +103,7 @@ fn oxc_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
     Ok(())
 }
 
+fn main() {
+    // No-op
+}
+
