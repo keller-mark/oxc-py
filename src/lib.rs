@@ -1,8 +1,6 @@
-#![expect(clippy::print_stdout)]
+use pyo3::prelude::*;
 
-use std::fs::File;
 use std::io::Write;
-use std::path::Path;
 use tempfile::NamedTempFile;
 
 use oxc_allocator::Allocator;
@@ -10,7 +8,7 @@ use oxc_codegen::CodeGenerator;
 use oxc_parser::Parser;
 use oxc_semantic::SemanticBuilder;
 use oxc_span::SourceType;
-use oxc_transformer::{BabelOptions, EnvOptions, HelperLoaderMode, TransformOptions, Transformer};
+use oxc_transformer::{HelperLoaderMode, JsxRuntime, TransformOptions, Transformer};
 
 fn create_temp_file(content: &str) -> NamedTempFile {
     let mut temp = NamedTempFile::new().expect("Failed to create temp file");
@@ -31,18 +29,7 @@ impl<'a> TransformerFromString<'a> for Transformer<'a> {
 }
 
 // Adapted from https://github.com/oxc-project/oxc/blob/71155cf575b6947bb0e85376d18375c2f3c50c73/crates/oxc_transformer/examples/transformer.rs
-fn main() {
-
-    let source_text = r#"
-        import * as React from 'react'
-        import * as ReactDOM from 'react-dom'
-        
-        ReactDOM.render(
-            <h1>Hello, world!</h1>,
-            document.getElementById('root')
-        );
-    "#;
-
+fn transform_jsx(source_text: &str) -> String {
     let allocator = Allocator::default();
     let source_type = SourceType::jsx();
 
@@ -51,7 +38,7 @@ fn main() {
     if !ret.errors.is_empty() {
         println!("Parser Errors:");
         for error in ret.errors {
-            let error = error.with_source_code(source_text.clone());
+            let error = error.with_source_code(source_text.to_string());
             println!("{error:?}");
         }
     }
@@ -69,7 +56,7 @@ fn main() {
     if !ret.errors.is_empty() {
         println!("Semantic Errors:");
         for error in ret.errors {
-            let error = error.with_source_code(source_text.clone());
+            let error = error.with_source_code(source_text.to_string());
             println!("{error:?}");
         }
     }
@@ -78,6 +65,7 @@ fn main() {
 
     let mut transform_options = TransformOptions::from_target("esnext").unwrap();
     transform_options.helper_loader.mode = HelperLoaderMode::External;
+    transform_options.jsx.runtime = JsxRuntime::Classic;
 
     let ret = Transformer::from_string(&allocator, &source_text, &transform_options).build_with_symbols_and_scopes(
         symbols,
@@ -88,7 +76,7 @@ fn main() {
     if !ret.errors.is_empty() {
         println!("Transformer Errors:");
         for error in ret.errors {
-            let error = error.with_source_code(source_text.clone());
+            let error = error.with_source_code(source_text.to_string());
             println!("{error:?}");
         }
     }
@@ -97,4 +85,21 @@ fn main() {
     println!("Transformed:\n");
     println!("{printed}");
 
+    return printed.to_string();
 }
+
+
+/// Formats the sum of two numbers as string.
+#[pyfunction]
+fn transform(source_text: String) -> PyResult<String> {
+    let source_str = source_text.to_string();
+    Ok(transform_jsx(&source_str).to_string())
+}
+
+/// A Python module implemented in Rust.
+#[pymodule]
+fn oxc_py(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(transform, m)?)?;
+    Ok(())
+}
+
