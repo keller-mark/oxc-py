@@ -1,4 +1,6 @@
 /target
+emsdk/
+.pyodide-xbuildenv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
