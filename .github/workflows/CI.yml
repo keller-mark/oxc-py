@@ -171,6 +171,7 @@ jobs:
           name: wheels-sdist
           path: dist
   
+  # Reference: https://pyodide.org/en/stable/development/building-and-testing-packages.html#github-actions-build-examples
   pyodide:
     runs-on: ubuntu-latest
     steps:
