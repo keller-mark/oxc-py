@@ -1,6 +1,6 @@
 # oxc-py
 
-Python bindings to the [oxc](https://github.com/oxc-project/oxc) JSX transformation API.
+Python bindings to the [oxc](https://github.com/oxc-project/oxc) [transformer](https://github.com/oxc-project/oxc/tree/main/crates/oxc_transformer).
 
 ## Usage
 
