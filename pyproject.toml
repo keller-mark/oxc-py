@@ -11,8 +11,14 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dynamic = ["version"]
-dependencies = [
-    "maturin>=1.8.2",
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  'pytest>=6.2.4',
+  "maturin>=1.8.2",
 ]
+
+
 [tool.maturin]
 features = ["pyo3/extension-module"]

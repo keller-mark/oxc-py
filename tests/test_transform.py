@@ -18,9 +18,6 @@ ReactDOM.render(
         expected = """
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-ReactDOM.render(
-  /* @__PURE__ */ React.createElement("h1", null, "Hello, world!"),
-  document.getElementById("root")
-);
+ReactDOM.render(React.createElement("h1", null, "Hello, world!"), document.getElementById("root"));
         """
         assert transform(jsx).strip() == expected.strip()
