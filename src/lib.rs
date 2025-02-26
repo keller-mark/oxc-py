@@ -43,8 +43,8 @@ fn transform_jsx(source_text: &str) -> String {
         }
     }
 
-    println!("Original:\n");
-    println!("{source_text}\n");
+    //println!("Original:\n");
+    //println!("{source_text}\n");
 
     let mut program = ret.program;
 
@@ -82,14 +82,14 @@ fn transform_jsx(source_text: &str) -> String {
     }
 
     let printed = CodeGenerator::new().build(&program).code;
-    println!("Transformed:\n");
-    println!("{printed}");
+    //println!("Transformed:\n");
+    //println!("{printed}");
 
     return printed.to_string();
 }
 
 
-/// Formats the sum of two numbers as string.
+/// Transforms JSX string to JS string.
 #[pyfunction]
 fn transform(source_text: String) -> PyResult<String> {
     let source_str = source_text.to_string();
