@@ -1,5 +1,7 @@
 # oxc-py
 
+<a href="https://colab.research.google.com/gist/keller-mark/658a2f466ff3b61bf8e73fedac4d2067/oxc_py_demo.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+
 Python bindings to the [oxc](https://github.com/oxc-project/oxc) [transformer](https://github.com/oxc-project/oxc/tree/main/crates/oxc_transformer).
 
 ## Usage
